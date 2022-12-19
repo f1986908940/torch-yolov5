@@ -88,6 +88,7 @@ class VOCDataset:
             # 如果图像不正常，损坏，他会直接给你抛异常
             pil_image.verify()
             
+            # 获取exif信息
             image_width, image_height = sys_utils.exif_size(pil_image)
             assert image_width > 9 and image_height > 9, f"Image size is too small{image_width} x {image_height}"
             
