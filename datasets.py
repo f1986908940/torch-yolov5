@@ -431,7 +431,7 @@ class VOCDataset:
             all_images.append(T.to_tensor(image))
             
         # 准备visual_info，用来显示的东西，image, annotations, image_id
-        visual_image_id = random.randint(0, len(images))
+        visual_image_id = random.randint(0, len(images) - 1)
         visual_image = images[visual_image_id]
         visual_annotations = normalize_annotations[visual_image_id]
         visual_info = visual_image_id, visual_image, visual_annotations  
