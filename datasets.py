@@ -9,7 +9,6 @@ from PIL import Image
 from sys_utils import _single_instance_logger as logger
 
 import torch
-from torch.utils.data import DataLoader
 import torchvision.transforms.functional as T
 
 
@@ -36,6 +35,7 @@ class VOCDataset:
         self.border_fill_value = 114
         self.border_fill_tuple = self.border_fill_value, self.border_fill_value, self.border_fill_value
         self.label_map = ["aeroplane", "bicycle", "bird", "boat", "bottle", "bus", "car", "cat", "chair", "cow", "diningtable", "dog", "horse", "motorbike", "person", "pottedplant", "sheep", "sofa", "train", "tvmonitor"]
+        self.num_classes = len(self.label_map)
         self.all_labeled_information = []
         
         cache_name = sys_utils.get_md5(root)
@@ -366,7 +366,7 @@ class VOCDataset:
         padding_top = padding_height // 2
         padding_bottom = padding_height - padding_top
         
-        image = cv2.copyMakeBorder(image, padding_top, padding_bottom, padding_left, padding_right, borderType=cv2.BORDER_CONSTANT, value=self.border_fill_value)
+        image = cv2.copyMakeBorder(image, padding_top, padding_bottom, padding_left, padding_right, borderType=cv2.BORDER_CONSTANT, value=self.border_fill_tuple)
         
         # 框处理
         # (norm_cx * origin_width + padding_left) / self.image_size    
@@ -447,9 +447,13 @@ if __name__ == '__main__':
 
     dataset = VOCDataset(True, 640, "/opt/vscodeprojects/data/VOCdevkit/train/")
     
-    dataloader = DataLoader(dataset, batch_size=8, shuffle=True, pin_memory=True, num_workers=0, collate_fn=dataset.collate_fn)
+    # dataloader = DataLoader(dataset, batch_size=8, shuffle=True, pin_memory=True, num_workers=0, collate_fn=dataset.collate_fn)
     
-    for batch in dataloader:
+    # for batch in dataloader:
+    #     pass
+    
+    from tqdm import tqdm
+    for _ in tqdm(dataset):
         pass
     
     # image, normalize_annotations, (w, h) = dataset.load_image_with_uniform_scale(0)
